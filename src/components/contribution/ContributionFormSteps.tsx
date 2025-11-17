@@ -214,7 +214,7 @@ export const DetailsStep = ({ formData, updateFormData, errors }: StepProps) => 
         />
         {errors.description && <p className="text-sm text-destructive mt-1">{errors.description}</p>}
         <p className="text-xs text-muted-foreground mt-1">
-          {formData.description?.length || 0} / 1000 characters
+          {formData.description?.length || 0} / 4000 characters
         </p>
       </div>
     </div>
