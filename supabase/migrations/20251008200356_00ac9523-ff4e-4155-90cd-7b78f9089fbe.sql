@@ -50,18 +50,6 @@ INSERT INTO kenya_carbon_credits (
   'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800'
 ),
 (
-  'Turkana Biogas Digesters',
-  'biogas',
-  'Community biogas digesters serving 500 households in Turkana, converting livestock waste into clean cooking fuel and organic fertilizer.',
-  'Turkana County, Kenya',
-  2023,
-  3500,
-  1200,
-  10.50,
-  'Gold Standard',
-  'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800'
-),
-(
   'Mombasa Solar Water Pumps',
   'solar_energy',
   'Solar-powered water pumping systems for 25 farming cooperatives in coastal Kenya, replacing diesel pumps and enabling sustainable irrigation.',
@@ -109,15 +97,4 @@ INSERT INTO kenya_carbon_credits (
   'Verra VCS',
   'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800'
 ),
-(
-  'Kericho Tea Estate Solar',
-  'solar_energy',
-  'Solar PV installation at tea processing facilities, replacing grid electricity with 2MW of clean energy.',
-  'Kericho County, Kenya',
-  2023,
-  6000,
-  2500,
-  14.00,
-  'I-REC',
-  'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800'
-);
+
