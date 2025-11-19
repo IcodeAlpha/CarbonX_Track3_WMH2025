@@ -1,5 +1,3 @@
--- Remove transactions table (selling functionality)
-DROP TABLE IF EXISTS public.transactions;
 
 -- Update carbon_credits to be a verified contributions ledger
 ALTER TABLE public.carbon_credits

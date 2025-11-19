@@ -1,8 +1,19 @@
--- Delete existing sample data
-DELETE FROM carbon_credits;
+CREATE TABLE IF NOT EXISTS kenya_carbon_credits (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_name TEXT NOT NULL,
+  project_type TEXT NOT NULL,
+  description TEXT,
+  location TEXT,
+  vintage INT,
+  total_tonnes NUMERIC(10,2),
+  available_tonnes NUMERIC(10,2),
+  price_per_tonne NUMERIC(10,2),
+  verification_standard TEXT,
+  image_url TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 
--- Insert realistic Kenya-focused carbon credits
-INSERT INTO carbon_credits (
+INSERT INTO kenya_carbon_credits (
   project_name, 
   project_type, 
   description, 
@@ -109,4 +120,4 @@ INSERT INTO carbon_credits (
   14.00,
   'I-REC',
   'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800'
-)
+);
