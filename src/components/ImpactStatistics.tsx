@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Calendar, Target, Zap } from 'lucide-react';
+import ImageSlider from "@/components/ImageSlider";  // <-- IMPORTANT: default export
 
 interface Contribution {
   id: string;
@@ -16,36 +17,34 @@ interface ImpactStatisticsProps {
 
 export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
   const verified = contributions.filter(c => c.verification_status === 'verified');
-  
-  // Calculate statistics
+
   const totalImpact = verified.reduce((sum, c) => sum + c.quantity, 0);
   const uniqueTypes = new Set(verified.map(c => c.contribution_type)).size;
-  
-  // Calculate monthly average
-  const firstContribution = verified.length > 0 
-    ? new Date(verified[verified.length - 1].created_at) 
+
+  const firstContribution = verified.length > 0
+    ? new Date(verified[verified.length - 1].created_at)
     : new Date();
+
   const monthsSinceFirst = Math.max(
     1,
     Math.ceil((Date.now() - firstContribution.getTime()) / (1000 * 60 * 60 * 24 * 30))
   );
+
   const monthlyAverage = Math.round(verified.length / monthsSinceFirst);
-  
-  // Calculate this month's contributions
+
   const now = new Date();
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const thisMonthCount = verified.filter(
     c => new Date(c.created_at) >= firstDayOfMonth
   ).length;
 
-  // Get most common contribution type
   const typeCounts = verified.reduce((acc, c) => {
     acc[c.contribution_type] = (acc[c.contribution_type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-  
+
   const mostCommonType = Object.entries(typeCounts).sort(([, a], [, b]) => b - a)[0];
-  const mostCommonTypeLabel = mostCommonType 
+  const mostCommonTypeLabel = mostCommonType
     ? mostCommonType[0].replace(/_/g, ' ')
     : 'None yet';
 
@@ -55,28 +54,28 @@ export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
       value: totalImpact.toLocaleString(),
       description: 'Combined impact from all contributions',
       icon: TrendingUp,
-      color: 'text-primary'
+      color: 'text-primary',
     },
     {
       title: 'This Month',
       value: thisMonthCount.toString(),
       description: `${monthlyAverage} per month average`,
       icon: Calendar,
-      color: 'text-blue-600'
+      color: 'text-blue-600',
     },
     {
       title: 'Contribution Types',
       value: uniqueTypes.toString(),
       description: `Most common: ${mostCommonTypeLabel}`,
       icon: Target,
-      color: 'text-green-600'
+      color: 'text-green-600',
     },
     {
       title: 'Verified Actions',
       value: verified.length.toString(),
       description: `${contributions.length - verified.length} pending`,
       icon: Zap,
-      color: 'text-orange-600'
+      color: 'text-orange-600',
     },
   ];
 
@@ -86,8 +85,11 @@ export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
         <CardTitle>Impact Statistics</CardTitle>
         <CardDescription>Your climate action breakdown</CardDescription>
       </CardHeader>
+
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {stats.map((stat) => (
             <div
               key={stat.title}
@@ -104,6 +106,30 @@ export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
             </div>
           ))}
         </div>
+
+
+        <div className="mt-4 p-6 border rounded-2xl bg-gradient-to-r from-blue-50 via-white to-green-50 shadow-xl ring-1 ring-blue-200">
+  <ImageSlider
+    images={[
+      "/actnow.jpg",
+      "/nplanetb.jpg",
+      "/savetheplanet.jpg",
+      "/nonaturenofuture.jpg",
+      "/planetoverprofit.jpg",
+      "/bank.jpg",
+      "/climateaction.jpg",
+      "/co2.jpg",
+      "/coolagain.jpg",
+      "/endclimate.jpg",
+      "/hot.jpg",
+      "/oldage.jpg",
+      "/time.jpg",
+    ]}
+    height={500} // <-- added height prop
+  />
+</div>
+
+
       </CardContent>
     </Card>
   );

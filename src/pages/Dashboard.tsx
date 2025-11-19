@@ -9,6 +9,7 @@ import { AchievementBadges } from '@/components/AchievementBadges';
 import { ImpactStatistics } from '@/components/ImpactStatistics';
 import { useAchievements } from '@/hooks/useAchievements';
 import { supabase } from '@/integrations/supabase/client';
+import ImageSlider from '@/components/ImageSlider';
 
 interface Contribution {
   id: string;
@@ -151,6 +152,7 @@ export default function Dashboard() {
             totalCount={totalCount}
             completionPercentage={completionPercentage}
           />
+          
         </div>
 
         <Card>
