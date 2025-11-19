@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Leaf, LayoutDashboard, LogOut, Sparkles, Users, ShoppingBag } from 'lucide-react';
+import { Leaf, LayoutDashboard, LogOut, Sparkles, Users, ShoppingBag, Award } from 'lucide-react';
 
 export function Navigation() {
   const { user, signOut } = useAuth();
@@ -22,7 +22,7 @@ export function Navigation() {
               </div>
               <span className="font-bold text-lg">CarbonX</span>
             </Link>
-            
+
             <div className="hidden md:flex items-center gap-2">
               <Button
                 variant={isActive('/dashboard') ? 'default' : 'ghost'}
@@ -43,7 +43,7 @@ export function Navigation() {
                   My Impact
                 </Link>
               </Button>
-              
+
 
               <Button
                 variant={isActive('/community') ? 'default' : 'ghost'}
@@ -55,7 +55,17 @@ export function Navigation() {
                 </Link>
               </Button>
 
-              
+              <Button
+                variant={isActive('/big-projects') ? 'default' : 'ghost'}
+                asChild
+              >
+                <Link to="/big-projects">
+                  <Award className="h-4 w-4 mr-2" />
+                  Big Projects
+                </Link>
+              </Button>
+
+
               <Button
                 variant={isActive('/marketplace') ? 'default' : 'ghost'}
                 asChild
@@ -65,7 +75,7 @@ export function Navigation() {
                   Marketplace
                 </Link>
               </Button>
-              
+
             </div>
           </div>
 

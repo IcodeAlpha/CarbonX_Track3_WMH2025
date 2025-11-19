@@ -10,6 +10,7 @@ import Contribute from "./pages/Contribute";
 import CommunityFeed from "./pages/CommunityFeed";
 import Marketplace from "./pages/Marketplace";
 import NotFound from "./pages/NotFound";
+import BigProjects from '@/pages/BigProjects';
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/community" element={<CommunityFeed />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/contribute" element={<Contribute />} />
+            <Route path="/big-projects" element={<BigProjects />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
