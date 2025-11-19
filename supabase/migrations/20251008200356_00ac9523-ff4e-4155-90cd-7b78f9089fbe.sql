@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS kenya_carbon_credits (
+CREATE TABLE IF NOT EXISTS carbon_credits (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_name TEXT NOT NULL,
   project_type TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS kenya_carbon_credits (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
-INSERT INTO kenya_carbon_credits (
+INSERT INTO carbon_credits (
   project_name, 
   project_type, 
   description, 
