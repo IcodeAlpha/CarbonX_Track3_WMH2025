@@ -50,7 +50,7 @@ const ContributionMap = ({ contributions, onLocationSelect }: ContributionMapPro
     if (!containerRef.current || mapRef.current) return;
 
     // Fix default marker icons
-    // @ts-ignore
+    
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconUrl: markerIcon,
