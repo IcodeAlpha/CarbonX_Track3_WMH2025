@@ -34,11 +34,13 @@ CREATE TABLE IF NOT EXISTS public.individual_contributions (
   blockchain_hash text,
   impact_metrics jsonb,
   photo_urls text[],
-  coordinates jsonb, -- <--- Add this line
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
   verified_at timestamp with time zone
 );
+
+ALTER TABLE public.individual_contributions
+ADD COLUMN coordinates jsonb;
 
 -- Enable RLS on individual_contributions
 ALTER TABLE public.individual_contributions ENABLE ROW LEVEL SECURITY;
