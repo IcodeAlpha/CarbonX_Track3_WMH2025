@@ -52,17 +52,31 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-accent/10 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2013&auto=format&fit=crop')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-teal-800/70 to-cyan-900/80" />
+      </div>
+
+      {/* Content */}
+      <Card className="w-full max-w-md relative z-10 shadow-2xl border-emerald-200/20 backdrop-blur-sm bg-white/95">
         <CardHeader className="text-center space-y-2">
           <div className="flex justify-center mb-2">
-            <div className="p-3 bg-primary/10 rounded-full">
-              <Leaf className="h-8 w-8 text-primary" />
+            <div className="p-3 bg-emerald-100 rounded-full">
+              <Leaf className="h-8 w-8 text-emerald-600" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Carbon Credit Marketplace</CardTitle>
+          <CardTitle className="text-2xl">CarbonX Build Green</CardTitle>
           <CardDescription>
-            Trade verified carbon offsets and make a difference
+            With CarbonX, you can explore climate efforts, contribute to the ones you care about.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,7 +108,7 @@ export default function Auth() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
@@ -133,7 +147,7 @@ export default function Auth() {
                     minLength={6}
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading}>
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
