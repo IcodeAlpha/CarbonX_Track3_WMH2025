@@ -87,16 +87,35 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <Navigation />
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Track your climate impact and contributions
-          </p>
-        </div>
+    <div className="min-h-screen relative">
+  {/* Background Image with Overlay */}
+  <div 
+    className="fixed inset-0 z-0"
+    style={{
+      backgroundImage: `url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed'
+    }}
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-emerald-50/50 to-teal-50/45" />
+  </div>
+
+  {/* Content */}
+  <div className="relative z-10">
+    <Navigation />
+    
+    <main className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
+          Dashboard
+        </h1>
+        <p className="text-gray-700">
+          Track your climate impact and contributions
+        </p>
+      </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
@@ -155,6 +174,7 @@ export default function Dashboard() {
           
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <Card>
           <CardHeader>
             <CardTitle>Recent Contributions</CardTitle>
@@ -196,7 +216,10 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+        </div>
+
       </main>
+    </div>
     </div>
   );
 }
