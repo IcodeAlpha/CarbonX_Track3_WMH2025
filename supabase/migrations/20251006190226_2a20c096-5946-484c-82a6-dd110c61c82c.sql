@@ -60,3 +60,12 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
+
+
+CREATE TABLE contribution_likes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  contribution_id UUID REFERENCES contributions(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(contribution_id, user_id)
+);
