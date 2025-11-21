@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.individual_contributions (
 );
 
 ALTER TABLE public.individual_contributions
-ADD COLUMN coordinates jsonb;
+ADD COLUMN IF NOT EXISTS coordinates JSONB;
 
 -- Enable RLS on individual_contributions
 ALTER TABLE public.individual_contributions ENABLE ROW LEVEL SECURITY;
