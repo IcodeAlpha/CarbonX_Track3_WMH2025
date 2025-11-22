@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Leaf, LayoutDashboard, LogOut, Sparkles, Users, ShoppingBag, Award } from 'lucide-react';
+import { Leaf, LayoutDashboard, LogOut, Sparkles, Users, ShoppingBag, Award, MapPin } from 'lucide-react';
 
 export function Navigation() {
   const { user, signOut } = useAuth();
@@ -66,15 +66,15 @@ export function Navigation() {
               </Button>
 
 
-              <Button
-                variant={isActive('/marketplace') ? 'default' : 'ghost'}
+             {/* <Button
+                variant={isActive('/heatmap') ? 'default' : 'ghost'}
                 asChild
               >
-                <Link to="/marketplace">
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  Marketplace
+                <Link to="/heatmap">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Heat Map
                 </Link>
-              </Button>
+              </Button> */}
 
             </div>
           </div>
