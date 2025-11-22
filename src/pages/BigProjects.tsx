@@ -51,60 +51,85 @@ export default function BigProjects() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <Navigation />
+    <div className="min-h-screen relative">
+  
+  <div 
+    className="fixed inset-0 z-0"
+    style={{
+      backgroundImage: `url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'fixed'
+    }}
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-white/91 via-sky-50/87 to-blue-50/83 backdrop-blur-sm" />
+  </div>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Government & NGO Sponsored Projects
-          </h1>
-          <p className="text-muted-foreground">
-            Explore large-scale climate projects supported by governments and NGOs in Kenya.
-          </p>
+  {/* Content */}
+  <div className="relative z-10">
+    <Navigation />
+
+    <main className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">
+          Government & NGO Sponsored Projects
+        </h1>
+        <p className="text-gray-700">
+          Explore large-scale climate projects supported by governments and NGOs in Kenya.
+        </p>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-muted-foreground bg-white/80 backdrop-blur-sm rounded-lg shadow-md">
+          Loading projects...
         </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
-            Loading projects...
-          </div>
-        ) : projects.length === 0 ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
-            No projects found.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project) => (
-              <Card key={project.id} className="border hover:shadow-lg transition-shadow">
-                {project.image_url && (
-                  <img
-                    src={project.image_url}
-                    alt={project.project_name}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                )}
-                <CardContent>
-                  <CardHeader>
-                    <CardTitle className="text-lg">{project.project_name}</CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      {project.project_type.replace(/_/g, ' ')}
-                    </CardDescription>
-                  </CardHeader>
-                  <p className="text-sm text-muted-foreground mb-2">{project.description}</p>
-                  <div className="flex justify-between items-center text-sm mt-4">
-                    <Badge className="bg-primary/10 text-primary">{project.verification_standard || 'N/A'}</Badge>
-                    <span>{project.location}</span>
+      ) : projects.length === 0 ? (
+        <div className="flex items-center justify-center py-20 text-muted-foreground bg-white/80 backdrop-blur-sm rounded-lg shadow-md">
+          No projects found.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <Card key={project.id} className="border-2 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all hover:border-primary/50">
+              {project.image_url && (
+                <img
+                  src={project.image_url}
+                  alt={project.project_name}
+                  className="w-full h-48 object-cover rounded-t-lg"
+                />
+              )}
+              <CardContent className="pt-4">
+                <CardHeader className="p-0 mb-4">
+                  <CardTitle className="text-lg">{project.project_name}</CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {project.project_type.replace(/_/g, ' ')}
+                  </CardDescription>
+                </CardHeader>
+                <p className="text-sm text-muted-foreground mb-2">{project.description}</p>
+                <div className="flex justify-between items-center text-sm mt-4">
+                  <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+                    {project.verification_standard || 'N/A'}
+                  </Badge>
+                  <span className="text-muted-foreground">{project.location}</span>
+                </div>
+                <div className="mt-4 pt-4 border-t text-sm flex justify-between">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Available</p>
+                    <p className="font-bold text-blue-700">{project.available_tonnes} t</p>
                   </div>
-                  <div className="mt-2 text-sm flex justify-between">
-                    <span>Available: {project.available_tonnes} t</span>
-                    <span>Price: ${project.price_per_tonne.toFixed(2)}</span>
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">Price</p>
+                    <p className="font-bold text-green-700">${project.price_per_tonne.toFixed(2)}</p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </main>
+  </div>
+</div>
   );
 }
