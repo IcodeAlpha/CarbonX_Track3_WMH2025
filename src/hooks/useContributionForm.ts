@@ -7,8 +7,16 @@ const contributionSchema = z.object({
   contribution_type: z.string().min(1, 'Please select a contribution type'),
   title: z.string().min(3, 'Title must be at least 3 characters').max(100, 'Title must be less than 100 characters'),
   location: z.string().min(2, 'Please enter a location'),
-  coordinates: z.tuple([z.number(), z.number()]).optional(),
-  quantity: z.string().min(1, 'Quantity is required').refine((val) => !isNaN(Number(val)) && Number(val) > 0, 'Quantity must be a positive number'),
+  coordinates: z
+  .union([
+    z.object({ lat: z.number(), lng: z.number() }),
+    z.tuple([z.number(), z.number()])
+  ])
+  .optional(),
+  quantity: z
+  .union([z.string(), z.number()])
+  .refine((val) => !isNaN(Number(val)) && Number(val) > 0, 'Quantity must be a positive number'),
+
   unit: z.string().min(1, 'Please select a unit'),
   start_date: z.string().min(1, 'Please select a start date'),
   description: z.string().min(20, 'Description must be at least 20 characters').max(1000, 'Description must be less than 1000 characters'),
@@ -68,8 +76,8 @@ export const useContributionForm = () => {
         start_date: contributionSchema.shape.start_date,
         description: contributionSchema.shape.description,
       }),
-      4: z.object({}), // Photos are optional
-      5: z.object({}), // Review step
+      4: z.object({}), 
+      5: z.object({}), 
     };
 
     const schema = stepSchemas[step as keyof typeof stepSchemas];
@@ -94,23 +102,33 @@ export const useContributionForm = () => {
   };
 
   const validateFullForm = (): boolean => {
-    try {
-      contributionSchema.parse(formData);
-      setErrors({});
-      return true;
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: Record<string, string> = {};
-        error.issues.forEach((err) => {
-          if (err.path[0]) {
-            newErrors[err.path[0] as string] = err.message;
-          }
-        });
-        setErrors(newErrors);
-      }
-      return false;
+  try {
+    const preparedData = {
+      ...formData,
+      quantity: formData.quantity ? Number(formData.quantity) : undefined,
+      coordinates: Array.isArray(formData.coordinates)
+        ? { lat: formData.coordinates[0], lng: formData.coordinates[1] }
+        : formData.coordinates,
+    };
+
+    contributionSchema.parse(preparedData);
+    setErrors({});
+    return true;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const newErrors: Record<string, string> = {};
+      error.issues.forEach((err) => {
+        if (err.path[0]) {
+          newErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(newErrors);
+      console.log("Validation errors:", error.issues); // <-- See what fails
     }
-  };
+    return false;
+  }
+};
+
 
   const nextStep = () => {
     if (validateStep(currentStep)) {

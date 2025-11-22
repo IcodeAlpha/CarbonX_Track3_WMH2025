@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Upload, X, TreePine, Zap, Droplets, Recycle, Leaf, Flame, Sprout } from "lucide-react";
 import { ContributionMapWrapper } from "@/components/ContributionMapWrapper";
+import { useState } from "react";
+import { MapPin, Navigation, Loader2, CheckCircle } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 interface StepProps {
   formData: any;
@@ -83,45 +86,214 @@ export const TypeStep = ({ formData, updateFormData, errors }: StepProps) => {
 
 // Step 2: Location
 export const LocationStep = ({ formData, updateFormData, errors }: StepProps) => {
-  const handleLocationSelect = (coordinates: [number, number]) => {
-    updateFormData({ coordinates });
+  
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [locationSelected, setLocationSelected] = useState(false);
+  const [manualEntry, setManualEntry] = useState(false);
+
+  
+  const handleLocationSelect = (coordinates: [number, number], address: string) => {
+  updateFormData({ 
+    coordinates: { lat: coordinates[0], lng: coordinates[1] }, // ✅ CHANGE THIS
+    location: address
+  });
+  setLocationSelected(true);
+  setManualEntry(false);
+};
+
+  
+  const useCurrentLocation = () => {
+    setIsLoadingLocation(true);
+    
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      setIsLoadingLocation(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        try {
+          // Reverse geocode to get address
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await response.json();
+          const address = data.display_name || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          
+          updateFormData({ 
+  coordinates: { lat: latitude, lng: longitude }, // ✅ CHANGE THIS
+  location: address
+});
+          setLocationSelected(true);
+          setManualEntry(false);
+        } catch (error) {
+          console.error('Error getting address:', error);
+          updateFormData({ 
+  coordinates: { lat: latitude, lng: longitude }, // ✅ CHANGE THIS
+  location: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+});
+          setLocationSelected(true);
+        } finally {
+          setIsLoadingLocation(false);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        alert('Unable to get your location. Please select on map or enter manually.');
+        setIsLoadingLocation(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+  // Handle manual location entry
+  const handleManualEntry = (value: string) => {
+    updateFormData({ location: value });
+    setManualEntry(true);
+    setLocationSelected(false);
+  };
+
+  // Clear location
+  const clearLocation = () => {
+    updateFormData({ coordinates: undefined, location: '' });
+    setLocationSelected(false);
+    setManualEntry(false);
   };
 
   return (
     <div className="space-y-6">
+      
       <div>
-        <h3 className="text-lg font-semibold mb-2">Where is your project?</h3>
+        <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+          <MapPin className="h-5 w-5 text-primary" />
+          Where is your contribution?
+        </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Select your location on the map or enter it manually
+          Help others find and verify your environmental impact by pinpointing your location
         </p>
       </div>
 
+      
+      <Card className="p-4 bg-muted/50">
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            type="button"
+            onClick={useCurrentLocation}
+            disabled={isLoadingLocation}
+            variant="outline"
+            className="flex-1 min-w-[200px]"
+          >
+            {isLoadingLocation ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Navigation className="h-4 w-4 mr-2" />
+            )}
+            Use My Location
+          </Button>
+          
+          <Button
+            type="button"
+            onClick={clearLocation}
+            variant="outline"
+            disabled={!locationSelected && !formData.location}
+            className="flex-1 min-w-[200px]"
+          >
+            Clear Location
+          </Button>
+        </div>
+        
+        {/* 🎨 CHANGE #8: Helper text */}
+        <p className="text-xs text-muted-foreground mt-2 text-center">
+          Click "Use My Location" for automatic detection or click on the map below
+        </p>
+      </Card>
+
+    
       <div>
-        <Label htmlFor="location">Location Name *</Label>
+        <Label htmlFor="location" className="flex items-center gap-2">
+          Location Name 
+          <span className="text-destructive">*</span>
+          {locationSelected && <CheckCircle className="h-4 w-4 text-green-500" />}
+        </Label>
         <Input
           id="location"
           value={formData.location || ''}
-          onChange={(e) => updateFormData({ location: e.target.value })}
-          placeholder="e.g., Nairobi, Kenya"
-          className="mt-1.5"
+          onChange={(e) => handleManualEntry(e.target.value)}
+          placeholder="e.g., Nairobi National Park, Kenya"
+          className={`mt-1.5 ${errors.location ? 'border-destructive' : ''} ${locationSelected ? 'border-green-500' : ''}`}
         />
-        {errors.location && <p className="text-sm text-destructive mt-1">{errors.location}</p>}
-      </div>
-
-      <div>
-        <Label>Select on Map (Optional)</Label>
-        <div className="mt-1.5 rounded-lg overflow-hidden border h-[400px]">
-          <ContributionMapWrapper
-            contributions={[]}
-            onLocationSelect={handleLocationSelect}
-          />
-        </div>
-        {formData.coordinates && (
-          <p className="text-xs text-muted-foreground mt-2">
-            Selected: {formData.coordinates[0].toFixed(4)}, {formData.coordinates[1].toFixed(4)}
+        {errors.location && (
+          <p className="text-sm text-destructive mt-1 flex items-center gap-1">
+            <span className="font-medium">⚠</span> {errors.location}
+          </p>
+        )}
+        {manualEntry && !errors.location && (
+          <p className="text-xs text-muted-foreground mt-1">
+            💡 Tip: Select on map for automatic address and coordinates
           </p>
         )}
       </div>
+
+     
+      {Array.isArray(formData.coordinates) &&
+ formData.coordinates.length === 2 &&
+ typeof formData.coordinates[0] === "number" &&
+ typeof formData.coordinates[1] === "number" && (
+  <Card className="p-3 bg-green-50 border-green-200">
+    <p className="text-xs text-green-700 mt-1">
+      Coordinates: {formData.coordinates[0].toFixed(4)}°, {formData.coordinates[1].toFixed(4)}°
+    </p>
+  </Card>
+)}
+
+      <div>
+        <Label className="mb-2 block">
+          Select Location on Map
+          <span className="text-muted-foreground font-normal ml-2">(Click anywhere to pin)</span>
+        </Label>
+        <div className="relative">
+          <div className="rounded-lg overflow-hidden border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
+            <ContributionMapWrapper
+              contributions={[]}
+              onLocationSelect={handleLocationSelect}
+              height="400px"
+              showLocationPicker={true}
+              initialCenter={formData.coordinates || [-0.0236, 37.9062]} // Kenya default
+              initialZoom={formData.coordinates ? 12 : 7}
+            />
+          </div>
+          
+          
+          {!locationSelected && !isLoadingLocation && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-primary/20 pointer-events-none">
+              <p className="text-sm font-medium text-primary flex items-center gap-2">
+                <MapPin className="h-4 w-4 animate-bounce" />
+                Click on the map to select your location
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      
+      <Card className="p-4 bg-blue-50 border-blue-200">
+        <h4 className="font-semibold text-sm text-blue-900 mb-2 flex items-center gap-2">
+          💡 Pro Tips
+        </h4>
+        <ul className="text-xs text-blue-800 space-y-1">
+          <li>• Zoom in for more precise location selection</li>
+          <li>• Accurate locations help verify your environmental impact</li>
+          <li>• Your exact coordinates are used for satellite verification</li>
+          <li>• Location appears on the community map for others to see</li>
+        </ul>
+      </Card>
     </div>
   );
 };
