@@ -9,7 +9,6 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Contribute from "./pages/Contribute";
 import CommunityFeed from "./pages/CommunityFeed";
-import Marketplace from "./pages/Marketplace";
 import NotFound from "./pages/NotFound";
 import BigProjects from '@/pages/BigProjects';
 
@@ -25,7 +24,6 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/community" element={<CommunityFeed />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/contribute" element={<Contribute />} />
