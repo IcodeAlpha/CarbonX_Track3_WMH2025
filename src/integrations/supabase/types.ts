@@ -86,6 +86,7 @@ export type Database = {
           id: string
           impact_metrics: Json | null
           location: string | null
+          coordinates: Json | null; 
           photo_urls: string[] | null
           quantity: number
           start_date: string | null
@@ -105,6 +106,7 @@ export type Database = {
           id?: string
           impact_metrics?: Json | null
           location?: string | null
+          coordinates?: Json | null; 
           photo_urls?: string[] | null
           quantity: number
           start_date?: string | null
@@ -126,6 +128,7 @@ export type Database = {
           location?: string | null
           photo_urls?: string[] | null
           quantity?: number
+          coordinates?: Json | null; 
           start_date?: string | null
           title?: string
           unit?: string
