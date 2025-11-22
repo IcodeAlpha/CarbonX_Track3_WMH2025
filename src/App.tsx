@@ -11,6 +11,7 @@ import Contribute from "./pages/Contribute";
 import CommunityFeed from "./pages/CommunityFeed";
 import NotFound from "./pages/NotFound";
 import BigProjects from '@/pages/BigProjects';
+import HeatMapPage from './pages/HeatMapPage';
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/contribute" element={<Contribute />} />
             <Route path="/big-projects" element={<BigProjects />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            {/* <Route path="/heatmap" element={<HeatMapPage />} /> */}
+            {/*ALL CUSTOM ROUTES*/}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
