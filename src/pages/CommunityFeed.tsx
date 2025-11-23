@@ -70,12 +70,12 @@ const formatTimeAgo = (date: string) => {
   return `${days}d ago`;
 };
 
-// 🔧 FIX #1: Parse location to extract coordinates
+//Parse location to extract coordinates
 const parseLocation = (locationStr: string | null): [number, number] | undefined => {
   if (!locationStr) return undefined;
 
   try {
-    // Try parsing as JSON first (if stored as object)
+    // Try parsing as JSON first
     const parsed = JSON.parse(locationStr);
     if (parsed.lat && parsed.lng) {
       return [parsed.lat, parsed.lng];
@@ -109,44 +109,68 @@ export default function CommunityFeed() {
     }
   }, [user, authLoading, navigate]);
 
-  // 🔧 FIX #2: Query correct table name 'individual_contributions'
+  // Query correct table name 'individual_contributions'
   const fetchContributions = async (showToast = false) => {
-    try {
-      if (showToast) setRefreshing(true);
-      else setLoading(true);
+  try {
+    if (showToast) setRefreshing(true);
+    else setLoading(true);
 
-      setError(null);
+    setError(null);
 
-      // Fetch contributions
-      const { data: contributionsData, error: fetchError } = await supabase
-        .from('individual_contributions')
-        .select('*')
-        .eq('verification_status', 'verified')
-        .order('created_at', { ascending: false })
-        .limit(50);
+    // Fetch contributions
+    const { data: contributionsData, error: fetchError } = await supabase
+      .from('individual_contributions')
+      .select('*')
+      .eq('verification_status', 'verified')
+      .order('created_at', { ascending: false })
+      .limit(50);
 
-      if (fetchError) {
-        console.error('Supabase error:', fetchError);
-        throw fetchError;
+    if (fetchError) {
+      console.error('Supabase error:', fetchError);
+      throw fetchError;
+    }
+
+    // Get unique user IDs
+    const userIds = [...new Set(contributionsData?.map(c => c.user_id) || [])];
+
+    // Fetch profiles for those users
+    const { data: profilesData } = await supabase
+      .from('profiles')
+      .select('id, full_name, username')
+      .in('id', userIds);
+
+    // Create a map for quick lookup
+    const profilesMap = new Map(
+      profilesData?.map(p => [p.id, p]) || []
+    );
+
+    console.log('Fetched contributions:', contributionsData);
+
+    // ✅ ADD GEOCODING HELPER FUNCTION
+    const geocodeLocation = async (locationName: string): Promise<[number, number] | undefined> => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}&limit=1`,
+          {
+            headers: {
+              'User-Agent': 'CarbonX/1.0' // Required by Nominatim
+            }
+          }
+        );
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+          return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+        }
+      } catch (error) {
+        console.error('Geocoding error for', locationName, error);
       }
+      return undefined;
+    };
 
-      // Get unique user IDs
-      const userIds = [...new Set(contributionsData?.map(c => c.user_id) || [])];
-
-      // Fetch profiles for those users
-      const { data: profilesData } = await supabase
-        .from('profiles')
-        .select('id, full_name, username')
-        .in('id', userIds);
-
-      // Create a map for quick lookup
-      const profilesMap = new Map(
-        profilesData?.map(p => [p.id, p]) || []
-      );
-
-      console.log('Fetched contributions:', contributionsData);
-
-      const transformedData: CommunityContribution[] = (contributionsData || []).map((item: any) => {
+    // ✅ TRANSFORM DATA WITH GEOCODING
+    const transformedData: CommunityContribution[] = await Promise.all(
+      (contributionsData || []).map(async (item: any) => {
         const profile = profilesMap.get(item.user_id);
         const fullName = profile?.full_name || profile?.username || 'Anonymous User';
         const nameParts = fullName.split(' ');
@@ -154,10 +178,28 @@ export default function CommunityFeed() {
           ? `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase()
           : fullName.substring(0, 2).toUpperCase();
 
-        const coordinates = parseLocation(item.location);
+        // Try to get coordinates from database first
+        let coordinates: [number, number] | undefined;
+        
+        if (item.coordinates && item.coordinates.lat && item.coordinates.lng) {
+          // Use stored coordinates
+          coordinates = [item.coordinates.lat, item.coordinates.lng];
+        } else if (item.location) {
+          // Geocode the location name
+          coordinates = await geocodeLocation(item.location);
+          
+          // Optional: Save coordinates back to database for future use
+          if (coordinates) {
+            await supabase
+              .from('individual_contributions')
+              .update({ 
+                coordinates: { lat: coordinates[0], lng: coordinates[1] } 
+              })
+              .eq('id', item.id);
+          }
+        }
 
-        console.log('Location string:', item.location);
-        console.log('Parsed coordinates:', coordinates);
+        console.log('Location:', item.location, 'Coordinates:', coordinates);
 
         return {
           id: item.id,
@@ -174,26 +216,25 @@ export default function CommunityFeed() {
           likes: 0,
           comments: 0,
           photo_urls: item.photo_urls,
-          coordinates: item.coordinates && item.coordinates.lat && item.coordinates.lng
-      ? [item.coordinates.lat, item.coordinates.lng]
-      : undefined
+          coordinates: coordinates
         };
-      });
+      })
+    );
 
-      setContributions(transformedData);
+    setContributions(transformedData);
 
-      if (showToast) {
-        toast.success(`Refreshed! Found ${transformedData.length} contributions`);
-      }
-    } catch (err: any) {
-      console.error('Error fetching contributions:', err);
-      setError(err.message || 'Failed to load contributions');
-      toast.error('Failed to load contributions: ' + err.message);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    if (showToast) {
+      toast.success(`Refreshed! Found ${transformedData.length} contributions`);
     }
-  };
+  } catch (err: any) {
+    console.error('Error fetching contributions:', err);
+    setError(err.message || 'Failed to load contributions');
+    toast.error('Failed to load contributions: ' + err.message);
+  } finally {
+    setLoading(false);
+    setRefreshing(false);
+  }
+};
 
   useEffect(() => {
     if (user) {
@@ -201,7 +242,7 @@ export default function CommunityFeed() {
     }
   }, [user]);
 
-  // 🔧 FIX #5: Update real-time subscription to correct table
+  // Update real-time subscription to correct table
   useEffect(() => {
     if (!user) return;
 
@@ -212,7 +253,7 @@ export default function CommunityFeed() {
         {
           event: '*',
           schema: 'public',
-          table: 'individual_contributions' // ✅ CHANGED: Updated table name
+          table: 'individual_contributions' 
         },
         (payload) => {
           console.log('Contribution changed:', payload);
