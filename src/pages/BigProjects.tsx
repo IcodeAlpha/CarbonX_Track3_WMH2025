@@ -51,8 +51,8 @@ export default function BigProjects() {
   };
 
   return (
-    <div className="min-h-screen relative">
-  
+ <div className="min-h-screen relative">
+  {/* Background Image - Large-scale wind/solar farm */}
   <div 
     className="fixed inset-0 z-0"
     style={{
@@ -90,8 +90,14 @@ export default function BigProjects() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <Card key={project.id} className="border-2 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all hover:border-primary/50">
+          {projects.map((project, index) => (
+            <Card 
+              key={project.id} 
+              className="border-2 bg-white/95 backdrop-blur-sm hover:shadow-2xl transition-all hover:border-primary/50 animate-float hover:scale-105 hover:-rotate-1 duration-300"
+              style={{
+                animationDelay: `${index * 0.1}s`
+              }}
+            >
               {project.image_url && (
                 <img
                   src={project.image_url}
@@ -130,6 +136,26 @@ export default function BigProjects() {
       )}
     </main>
   </div>
+
+  {/* Floating Animation Styles */}
+  <style>{`
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-10px) rotate(0.5deg);
+      }
+    }
+
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .animate-float:hover {
+      animation-play-state: paused;
+    }
+  `}</style>
 </div>
   );
 }
