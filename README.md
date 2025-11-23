@@ -1,11 +1,11 @@
 
 # CarbonX 
 
-A blockchain-powered climate action platform that verifies, tracks, and rewards individual environmental contributions in Kenya. Built with React, TypeScript, Supabase, and integrated with real-time mapping.
+A digital platform that helps people in Kenya track their real environmental actions—such as clean cooking, tree planting, waste reduction, and renewable energy use—and automatically verify them using AI, geolocation, and images. Each contribution is recorded in a transparent, tamper-proof blockchain log and converted into measurable climate impact. Built with React, TypeScript, and Supabase, the platform provides real-time validation, mapping, and digital proof of impact that users can use for rewards, reporting, or sustainability programs.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#-features)
 - [Tech Stack](#️-technologies-used)
@@ -95,77 +95,12 @@ A blockchain-powered climate action platform that verifies, tracks, and rewards 
 
 3. **Set up environment variables**
    
-   Create a `.env` file (see [Environment Setup](#-environment-setup) above)
+   Create a `.env` file 
 
 4. **Run database migrations**
    
-   Go to your **Supabase Dashboard → SQL Editor** and execute:
+   Go to your **Supabase Dashboard → SQL Editor** and execute
 
-   ```sql
-   -- Create individual_contributions table
-   CREATE TABLE IF NOT EXISTS public.individual_contributions (
-     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-     user_id uuid REFERENCES auth.users(id) NOT NULL,
-     contribution_type text NOT NULL,
-     title text NOT NULL,
-     description text,
-     location text,
-     coordinates jsonb,
-     quantity numeric NOT NULL,
-     unit text NOT NULL,
-     start_date date,
-     verification_status text DEFAULT 'pending',
-     verification_method text,
-     blockchain_hash text,
-     impact_metrics jsonb,
-     photo_urls text[],
-     created_at timestamp with time zone DEFAULT now(),
-     updated_at timestamp with time zone DEFAULT now(),
-     verified_at timestamp with time zone
-   );
-
-   -- Enable Row Level Security
-   ALTER TABLE public.individual_contributions ENABLE ROW LEVEL SECURITY;
-
-   -- Create RLS policies
-   CREATE POLICY "Users can view their own contributions"
-   ON public.individual_contributions FOR SELECT
-   USING (auth.uid() = user_id);
-
-   CREATE POLICY "Users can create their own contributions"
-   ON public.individual_contributions FOR INSERT
-   WITH CHECK (auth.uid() = user_id);
-
-   CREATE POLICY "Users can update their own contributions"
-   ON public.individual_contributions FOR UPDATE
-   USING (auth.uid() = user_id);
-
-   CREATE POLICY "Anyone can view verified contributions"
-   ON public.individual_contributions FOR SELECT
-   USING (verification_status = 'verified');
-
-   -- Create profiles table
-   CREATE TABLE IF NOT EXISTS public.profiles (
-     id uuid PRIMARY KEY REFERENCES auth.users(id),
-     email text,
-     full_name text,
-     username text,
-     wallet_address text,
-     balance numeric DEFAULT 0,
-     created_at timestamp with time zone DEFAULT now(),
-     updated_at timestamp with time zone DEFAULT now()
-   );
-
-   ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
-   CREATE POLICY "Users can view their own profile"
-   ON public.profiles FOR SELECT
-   USING (auth.uid() = id);
-
-   CREATE POLICY "Users can update their own profile"
-   ON public.profiles FOR UPDATE
-   USING (auth.uid() = id);
-   ```
 
 5. **Start the development server**
    ```bash
