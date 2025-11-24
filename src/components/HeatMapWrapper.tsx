@@ -1,9 +1,9 @@
-// HeatMapWrapper.tsx - Leaflet Heat Map Component
+
 
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'leaflet.heat'; // Install: npm install leaflet.heat @types/leaflet.heat
+import 'leaflet.heat'; 
 
 interface HeatMapWrapperProps {
   contributions: any[];
@@ -18,15 +18,15 @@ export default function HeatMapWrapper({ contributions, height = '600px' }: Heat
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    // Initialize map centered on Kenya
+    
     const map = L.map(containerRef.current, {
-      center: [-0.0236, 37.9062], // Kenya coordinates
+      center: [-0.0236, 37.9062], 
       zoom: 7,
       scrollWheelZoom: true,
       zoomControl: true
     });
 
-    // Add OpenStreetMap tiles
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
       maxZoom: 19
@@ -34,7 +34,7 @@ export default function HeatMapWrapper({ contributions, height = '600px' }: Heat
 
     mapRef.current = map;
 
-    // Cleanup
+    
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -46,25 +46,24 @@ export default function HeatMapWrapper({ contributions, height = '600px' }: Heat
   useEffect(() => {
     if (!mapRef.current || !contributions.length) return;
 
-    // Remove existing heat layer
     if (heatLayerRef.current) {
       mapRef.current.removeLayer(heatLayerRef.current);
     }
 
-    // Prepare heat map data
+    
     const heatData = contributions
       .map(contribution => {
         let lat, lng;
 
-        // Handle both coordinate formats: {lat, lng} and [lat, lng]
+       
         if (contribution.coordinates) {
           if (typeof contribution.coordinates === 'object') {
-            // Format: {lat: number, lng: number}
+            
             if (contribution.coordinates.lat && contribution.coordinates.lng) {
               lat = contribution.coordinates.lat;
               lng = contribution.coordinates.lng;
             }
-            // Format: [lat, lng]
+            
             else if (Array.isArray(contribution.coordinates) && contribution.coordinates.length === 2) {
               lat = contribution.coordinates[0];
               lng = contribution.coordinates[1];
@@ -72,14 +71,14 @@ export default function HeatMapWrapper({ contributions, height = '600px' }: Heat
           }
         }
 
-        // Validate coordinates
+        
         if (
           typeof lat === 'number' && 
           typeof lng === 'number' &&
           lat >= -90 && lat <= 90 &&
           lng >= -180 && lng <= 180
         ) {
-          // Third value is intensity (0-1), you can adjust based on contribution properties
+          
           const intensity = contribution.quantity ? Math.min(contribution.quantity / 100, 1) : 0.5;
           return [lat, lng, intensity];
         }

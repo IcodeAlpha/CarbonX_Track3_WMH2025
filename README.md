@@ -1,7 +1,7 @@
 
 # CarbonX 
 
-A digital platform that helps people in Kenya track their real environmental actions—such as clean cooking, tree planting, waste reduction, and renewable energy use—and automatically verify them using AI, geolocation, and images. Each contribution is recorded in a transparent, tamper-proof blockchain log and converted into measurable climate impact. Built with React, TypeScript, and Supabase, the platform provides real-time validation, mapping, and digital proof of impact that users can use for rewards, reporting, or sustainability programs.
+A digital platform that helps people in Kenya track their real environmental actions—such as clean cooking, tree planting, waste reduction, and renewable energy use—and automatically verify them using AI, geolocation, and images. Each contribution is recorded in a transparent blockchain log and converted into measurable climate impact. Built with React, TypeScript, and Supabase, the platform provides real-time validation, mapping, and digital proof of impact that users can use for rewards, reporting, or sustainability programs.
 
 ---
 
@@ -230,10 +230,9 @@ carbonx/
 **Features**:
 - **Global Map**: Interactive map showing all verified contributions with color-coded markers
 - **Contribution Cards**: 
-  - User avatar and name
   - Contribution type badge
   - Title and description
-  - Photo gallery (if available)
+  - Photo gallery 
   - Location and quantity
   - Like and comment buttons
   - Time ago indicator
@@ -386,8 +385,6 @@ Each contribution type calculates different environmental impact:
 
 ####  Tree Planting
 - **CO₂ Sequestration**: Estimated carbon captured per tree
-- **Oxygen Production**: O₂ generated annually
-- **Biodiversity Impact**: Species supported
 
 ####  Solar Energy
 - **kWh Generated**: Renewable energy produced
@@ -401,17 +398,15 @@ Each contribution type calculates different environmental impact:
 
 ####  Composting
 - **Waste Diverted**: Kg of organic waste from landfills
-- **Methane Avoided**: CH₄ emissions prevented
 - **Soil Enrichment**: Nutrient value added
 
 ####  Clean Cooking
-- **Emissions Reduced**: CO, PM2.5, black carbon
+- **Emissions Reduced**: CO
 - **Fuel Saved**: Traditional fuel usage reduced
 - **Health Impact**: Indoor air quality improvement
 
 ####  Urban Gardening
 - **Food Produced**: Kg of produce grown
-- **Food Miles Saved**: Transportation emissions avoided
 - **Green Space Created**: m² of urban greening
 
 ### Token Calculation
@@ -435,24 +430,20 @@ totalTokens = baseTokens × quantity
 -  **Blockchain Integration**: Immutable verification on Ethereum/Polygon
 -  **Mobile App**: React Native version for iOS/Android
 -  **Carbon Credit Marketplace**: Buy/sell verified carbon credits
--  **Social Features**: Follow users, share to social media
 -  **Advanced Analytics**: Data visualization dashboard
 -  **Multi-language Support**: i18n for Swahili, French, etc.
 -  **Offline Mode**: PWA with offline sync
--  **Gamification**: Leaderboards, challenges, competitions
 -  **Corporate Accounts**: Team/organization features
 -  **API Access**: Public API for third-party integrations
 -  **Satellite Verification**: Automated satellite image analysis
--  **Payment Integration**: M-Pesa, Stripe for credit purchases
 
 ### Technical Improvements
--  E2E testing with Playwright
+-  E2E testing
 -  Performance optimization
 -  SEO optimization
 -  CDN for image hosting
 -  Redis caching layer
 -  GraphQL API option
--  Microservices architecture
 
 ---
 
@@ -468,22 +459,19 @@ We welcome contributions from the community! Here's how you can help:
 
 ---
 
-## Team & Acknowledgments
+## Acknowledgments
 
-### Built With ❤️
 Built for a sustainable future in Kenya and beyond.
 
 ### Core Technologies
 - **Supabase** - For the amazing BaaS platform
 - **OpenStreetMap & Nominatim** - Free mapping services
-- **shadcn/ui** - Beautiful component library
-- **Lucide** - Icon library
 - **Vercel** - Deployment platform
 
 ### Special Thanks
-- All climate activists and early adopters
-- Open source community
-- Kenyan environmental organizations
+- The Wangari Maathai Foundation
+- GreenBelt Movement
+- Antugrow Team
 - Everyone fighting climate change
 
 ---

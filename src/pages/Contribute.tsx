@@ -58,7 +58,7 @@ const Contribute = () => {
     if (user) {
       fetchContributions();
       
-      // Set up realtime subscription for verification updates
+
       const channel = supabase
         .channel('contributions-changes')
         .on(
@@ -121,7 +121,7 @@ const Contribute = () => {
     setIsSubmitting(true);
 
     try {
-      // Insert contribution to database
+      
       const { data, error } = await supabase
         .from('individual_contributions')
         .insert({
@@ -233,7 +233,7 @@ const Contribute = () => {
 
   return (
     <div className="min-h-screen relative">
-  {/* Background Image - Hands planting seedlings */}
+  {/* Background Image */}
   <div 
     className="fixed inset-0 z-0"
     style={{

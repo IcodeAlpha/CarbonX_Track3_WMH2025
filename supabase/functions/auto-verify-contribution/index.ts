@@ -53,7 +53,7 @@ serve(async (req) => {
       
       return {
         co2_reduced_kg: parseFloat(co2Reduced),
-        ai_confidence_score: factor.score + (Math.random() * 0.1 - 0.05), // Add slight variation
+        ai_confidence_score: factor.score + (Math.random() * 0.1 - 0.05), 
         verification_method: 'ai_image_analysis',
         verified_at: new Date().toISOString(),
       };

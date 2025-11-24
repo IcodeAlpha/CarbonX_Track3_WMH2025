@@ -1,5 +1,3 @@
-// HeatMapPage.tsx - New page for contributions heat map
-
 import { useState, useEffect } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -26,7 +24,7 @@ export default function HeatMapPage() {
   const fetchContributions = async () => {
     setLoading(true);
     try {
-      // Changed from 'contributions' to 'individual_contributions'
+      
       const { data, error } = await supabase
         .from('individual_contributions')
         .select('*')
@@ -77,12 +75,12 @@ export default function HeatMapPage() {
     const typeCounts = {};
 
     data.forEach(contribution => {
-      // Count locations
+     
       if (contribution.location) {
         locationCounts[contribution.location] = (locationCounts[contribution.location] || 0) + 1;
       }
       
-      // Count types
+      
       if (contribution.contribution_type) {
         typeCounts[contribution.contribution_type] = (typeCounts[contribution.contribution_type] || 0) + 1;
       }

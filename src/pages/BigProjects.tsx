@@ -52,7 +52,7 @@ export default function BigProjects() {
 
   return (
  <div className="min-h-screen relative">
-  {/* Background Image - Large-scale wind/solar farm */}
+  {/* Background Image */}
   <div 
     className="fixed inset-0 z-0"
     style={{

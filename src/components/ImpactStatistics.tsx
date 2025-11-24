@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Calendar, Target, Zap } from 'lucide-react';
-import ImageSlider from "@/components/ImageSlider";  // <-- IMPORTANT: default export
+import ImageSlider from "@/components/ImageSlider"; 
 
 interface Contribution {
   id: string;
@@ -125,7 +125,7 @@ export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
       "/oldage.jpg",
       "/time.jpg",
     ]}
-    height={500} // <-- added height prop
+    height={500} 
   />
 </div>
 

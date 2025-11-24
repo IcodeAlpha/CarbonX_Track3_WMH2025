@@ -23,7 +23,7 @@ interface ContributionMapWrapperProps {
   initialZoom?: number;
 }
 
-// Lazy load to ensure Leaflet only loads on client
+
 const ContributionMap = lazy(() => import('./ContributionMap'));
 
 export const ContributionMapWrapper = ({ 

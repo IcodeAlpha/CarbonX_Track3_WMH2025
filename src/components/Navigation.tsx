@@ -57,13 +57,13 @@ export function Navigation() {
             })}
           </div>
 
-          {/* Desktop Sign Out */}
+          
           <Button variant="ghost" onClick={signOut} className="hidden md:flex">
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out
           </Button>
 
-          {/* Mobile Hamburger Menu */}
+          
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon">

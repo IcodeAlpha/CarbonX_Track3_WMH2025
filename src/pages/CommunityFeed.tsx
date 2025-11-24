@@ -109,7 +109,7 @@ export default function CommunityFeed() {
     }
   }, [user, authLoading, navigate]);
 
-  // Query correct table name 'individual_contributions'
+  
   const fetchContributions = async (showToast = false) => {
   try {
     if (showToast) setRefreshing(true);
@@ -130,30 +130,30 @@ export default function CommunityFeed() {
       throw fetchError;
     }
 
-    // Get unique user IDs
+  
     const userIds = [...new Set(contributionsData?.map(c => c.user_id) || [])];
 
-    // Fetch profiles for those users
+    
     const { data: profilesData } = await supabase
       .from('profiles')
       .select('id, full_name, username')
       .in('id', userIds);
 
-    // Create a map for quick lookup
+    
     const profilesMap = new Map(
       profilesData?.map(p => [p.id, p]) || []
     );
 
     console.log('Fetched contributions:', contributionsData);
 
-    // ✅ ADD GEOCODING HELPER FUNCTION
+    // ADD GEOCODING HELPER FUNCTION
     const geocodeLocation = async (locationName: string): Promise<[number, number] | undefined> => {
       try {
         const response = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}&limit=1`,
           {
             headers: {
-              'User-Agent': 'CarbonX/1.0' // Required by Nominatim
+              'User-Agent': 'CarbonX/1.0' 
             }
           }
         );
@@ -168,7 +168,7 @@ export default function CommunityFeed() {
       return undefined;
     };
 
-    // ✅ TRANSFORM DATA WITH GEOCODING
+    // TRANSFORM DATA WITH GEOCODING
     const transformedData: CommunityContribution[] = await Promise.all(
       (contributionsData || []).map(async (item: any) => {
         const profile = profilesMap.get(item.user_id);
@@ -242,7 +242,7 @@ export default function CommunityFeed() {
     }
   }, [user]);
 
-  // Update real-time subscription to correct table
+  // Update real-time subscription 
   useEffect(() => {
     if (!user) return;
 
@@ -257,7 +257,7 @@ export default function CommunityFeed() {
         },
         (payload) => {
           console.log('Contribution changed:', payload);
-          fetchContributions(); // Refresh on any change
+          fetchContributions(); 
         }
       )
       .subscribe();
@@ -267,7 +267,7 @@ export default function CommunityFeed() {
     };
   }, [user]);
 
-  // Like functionality (keeping for future use)
+  
   const handleLike = async (contributionId: string) => {
     if (!user) {
       toast.error('Please login to like contributions');
@@ -316,7 +316,7 @@ export default function CommunityFeed() {
       }
     } catch (err: any) {
       console.error('Error toggling like:', err);
-      // If table doesn't exist, just show message
+      
       if (err.message?.includes('relation "contribution_likes" does not exist')) {
         toast.info('Like feature coming soon!');
       } else {
@@ -355,7 +355,7 @@ export default function CommunityFeed() {
 
   return (
     <div className="min-h-screen relative">
-  {/* Background Image - Group planting trees together */}
+  {/* Background Image */}
   <div 
     className="fixed inset-0 z-0"
     style={{

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Import marker images
+
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -29,25 +29,25 @@ interface ContributionMapProps {
   initialZoom?: number;
 }
 
-// 🎨 CHANGE #1: Enhanced color coding based on contribution type
+
 const getContributionColor = (type: string): string => {
   switch (type) {
     case 'tree_planting':
-      return '#10b981'; // Green
+      return '#10b981'; 
     case 'water_conservation':
-      return '#3b82f6'; // Blue
+      return '#3b82f6'; 
     case 'solar_panels':
-      return '#eab308'; // Yellow
+      return '#eab308'; 
     case 'gardening':
-      return '#ec4899'; // Pink
+      return '#ec4899'; 
     case 'composting':
-      return '#8b5cf6'; // Purple
+      return '#8b5cf6'; 
     default:
-      return '#6366f1'; // Indigo
+      return '#6366f1'; 
   }
 };
 
-// 🎨 CHANGE #2: Better emoji icons
+
 const getContributionIcon = (type: string): string => {
   switch (type) {
     case "tree_planting":
@@ -65,7 +65,7 @@ const getContributionIcon = (type: string): string => {
   }
 };
 
-// 🎨 CHANGE #3: Create custom styled markers (like climate issues map)
+
 const createCustomMarker = (type: string): L.DivIcon => {
   const color = getContributionColor(type);
   const emoji = getContributionIcon(type);
@@ -98,7 +98,7 @@ const createCustomMarker = (type: string): L.DivIcon => {
   });
 };
 
-// 🌍 CHANGE #4: Reverse geocoding function (get address from coordinates)
+
 const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
   try {
     const response = await fetch(
@@ -112,7 +112,7 @@ const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
   }
 };
 
-// 📅 CHANGE #5: Format timestamp for popup
+
 const formatTimeAgo = (dateString?: string): string => {
   if (!dateString) return '';
   const seconds = Math.floor((new Date().getTime() - new Date(dateString).getTime()) / 1000);
@@ -130,7 +130,7 @@ const ContributionMap = ({
   onLocationSelect,
   height = '500px',
   showLocationPicker = false,
-  initialCenter = [-0.0236, 37.9062], // Nairobi, Kenya
+  initialCenter = [-0.0236, 37.9062], 
   initialZoom = 7
 }: ContributionMapProps) => {
   const mapRef = useRef<L.Map | null>(null);
@@ -141,7 +141,7 @@ const ContributionMap = ({
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    // Fix default marker icons
+    
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconUrl: markerIcon,
@@ -149,18 +149,18 @@ const ContributionMap = ({
       shadowUrl: markerShadow,
     });
 
-    // 🗺️ CHANGE #6: Smart map centering
+    
     const mappedContributions = contributions.filter(c => c.coordinates);
     let mapCenter: [number, number] = initialCenter;
     let zoom = initialZoom;
 
     if (mappedContributions.length > 0) {
-      // If we have contributions, center on first one
+      
       mapCenter = mappedContributions[0].coordinates!;
       zoom = 10;
     }
 
-    // Initialize map
+    
     const map = L.map(containerRef.current, {
       zoomControl: true,
       scrollWheelZoom: true,
@@ -168,23 +168,23 @@ const ContributionMap = ({
     
     mapRef.current = map;
 
-    // 🎨 CHANGE #7: Better tile layer with attribution
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19,
     }).addTo(map);
 
-    // 🖱️ CHANGE #8: Interactive location picker (like LocationPicker component)
+    
     if (onLocationSelect && showLocationPicker) {
       map.on('click', async (e) => {
         const { lat, lng } = e.latlng;
         
-        // Remove existing selection marker
+        
         if (selectionMarkerRef.current) {
           map.removeLayer(selectionMarkerRef.current);
         }
 
-        // 🎯 CHANGE #9: Add pulsing selection marker
+      
         const selectionIcon = L.divIcon({
           html: `
             <div style="
@@ -212,11 +212,11 @@ const ContributionMap = ({
         const marker = L.marker([lat, lng], { icon: selectionIcon }).addTo(map);
         selectionMarkerRef.current = marker;
 
-        // 🌍 CHANGE #10: Get address and callback
+        
         const address = await reverseGeocode(lat, lng);
         onLocationSelect([lat, lng], address);
         
-        // Add popup showing selected location
+        
         marker.bindPopup(`
           <div class="p-2">
             <div class="font-semibold text-sm mb-1">📍 Selected Location</div>
@@ -225,18 +225,18 @@ const ContributionMap = ({
         `).openPopup();
       });
 
-      // 🖱️ CHANGE #11: Cursor changes when in selection mode
+      
       map.getContainer().style.cursor = 'crosshair';
     }
 
-    // 🎨 CHANGE #12: Add contribution markers with enhanced popups
+    
     mappedContributions.forEach((contribution) => {
       const marker = L.marker(
         contribution.coordinates!,
         { icon: createCustomMarker(contribution.contribution_type) }
       ).addTo(map);
       
-      // 🎨 CHANGE #13: Enhanced popup design (inspired by climate issues map)
+      
       const popupContent = `
         <div class="min-w-[250px] p-3">
           <div class="flex items-start gap-2 mb-2">
@@ -282,13 +282,13 @@ const ContributionMap = ({
         className: 'custom-popup'
       });
 
-      // 🎨 CHANGE #14: Hover effect - open popup on hover
+      
       marker.on('mouseover', function() {
         this.openPopup();
       });
     });
 
-    // 🗺️ CHANGE #15: Auto-fit bounds if multiple contributions
+   
     if (mappedContributions.length > 1) {
       const bounds = L.latLngBounds(
         mappedContributions.map(c => c.coordinates as [number, number])
@@ -296,7 +296,7 @@ const ContributionMap = ({
       map.fitBounds(bounds, { padding: [50, 50] });
     }
 
-    // 🧹 Cleanup
+    
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
