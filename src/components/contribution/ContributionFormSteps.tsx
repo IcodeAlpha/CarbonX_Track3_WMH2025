@@ -28,6 +28,7 @@ export const TypeStep = ({ formData, updateFormData, errors }: StepProps) => {
     { value: 'composting', label: 'Composting', icon: Recycle, description: 'Organic waste management' },
     { value: 'clean_cooking', label: 'Clean Cooking', icon: Flame, description: 'Efficient cookstoves' },
     { value: 'gardening', label: 'Urban Gardening', icon: Sprout, description: 'Sustainable food production' },
+    { value: 'electric_vehicles', label: 'Electric Vehicles', icon: Sprout, description: 'Sustainable transportation' },
   ];
 
   return (
