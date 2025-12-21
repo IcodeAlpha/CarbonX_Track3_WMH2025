@@ -83,7 +83,7 @@ export function ImpactStatistics({ contributions }: ImpactStatisticsProps) {
     <Card>
       <CardHeader>
         <CardTitle>Impact Statistics</CardTitle>
-        <CardDescription>Your climate action breakdown</CardDescription>
+        <CardDescription>Your climate action</CardDescription>
       </CardHeader>
 
       <CardContent>
