@@ -1,14 +1,10 @@
 # CarbonX Pitch Deck
 
-## Team Information
+## About
 
-**Team Name:** CarbonX
-
-**Team Lead:** Alpha Lee Njagi Munene  
+**Founder:** Alpha Lee Njagi Munene  
 **Email:** alphamunene5@gmail.com  
 **Phone:** 0769009184
-
-**Track:** Track 3 — Community Engagement & Education
 
 **Mission:** *"Making every climate action in Kenya count"*
 
@@ -195,11 +191,9 @@ AI Verification → Earn Climate Tokens
 
 ## Contact Information
 
-**Team Lead:** Alpha Lee Njagi Munene  
+**Founder:** Alpha Lee Njagi Munene  
 **Email:** alphamunene5@gmail.com  
 **Phone:** 0769009184
-
-**Track 3** — Community Engagement & Education
 
 ---
 
