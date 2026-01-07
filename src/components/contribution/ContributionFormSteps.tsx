@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon, Upload, X, TreePine, Zap, Droplets, Recycle, Leaf, Flame, Sprout } from "lucide-react";
+import { CalendarIcon, Upload, X, TreePine, Zap, Droplets, Recycle, Leaf, Flame, Sprout, Bike } from "lucide-react";
 import { ContributionMapWrapper } from "@/components/ContributionMapWrapper";
 import { useState } from "react";
 import { MapPin, Navigation, Loader2, CheckCircle } from "lucide-react";
@@ -22,13 +22,30 @@ interface StepProps {
 // Step 1: Type & Basic Info
 export const TypeStep = ({ formData, updateFormData, errors }: StepProps) => {
   const contributionTypes = [
-    { value: 'tree_planting', label: 'Tree Planting', icon: TreePine, description: 'Reforestation and urban greening' },
-    { value: 'home_solar', label: 'Solar Energy', icon: Zap, description: 'Solar panels and renewable energy' },
-    { value: 'rainwater_harvesting', label: 'Water Conservation', icon: Droplets, description: 'Rainwater collection systems' },
-    { value: 'composting', label: 'Composting', icon: Recycle, description: 'Organic waste management' },
-    { value: 'clean_cooking', label: 'Clean Cooking', icon: Flame, description: 'Efficient cookstoves' },
-    { value: 'gardening', label: 'Urban Gardening', icon: Sprout, description: 'Sustainable food production' },
-    { value: 'electric_vehicles', label: 'Electric Vehicles', icon: Sprout, description: 'Sustainable transportation' },
+    {
+      value: 'urban_flowering',
+      label: 'Urban Flowering',
+      icon: Sprout,
+      description: 'Flower planting, pollinator support, and urban beautification',
+    },
+    {
+      value: 'electric_mobility',
+      label: 'Electric Mobility',
+      icon: Bike,
+      description: 'Electric vehicles, motorbikes, and e-bikes',
+    },
+    {
+      value: 'solar_power',
+      label: 'Solar Power Usage',
+      icon: Zap,
+      description: 'Solar panels and renewable energy adoption',
+    },
+    {
+      value: 'tree_planting',
+      label: 'Tree Planting',
+      icon: TreePine,
+      description: 'Reforestation and long-term carbon sequestration',
+    },
   ];
 
   return (
