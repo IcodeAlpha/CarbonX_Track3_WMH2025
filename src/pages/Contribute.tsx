@@ -347,7 +347,7 @@ const Contribute = () => {
       <CardContent className="flex flex-col items-center justify-center py-12">
         <Leaf className="w-16 h-16 text-muted-foreground mb-4" />
         <p className="text-muted-foreground text-center">
-          No contributions yet. Start making an impact today!
+          No contributions yet!
         </p>
       </CardContent>
     </Card>
