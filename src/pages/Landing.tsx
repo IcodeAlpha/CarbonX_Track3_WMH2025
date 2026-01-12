@@ -72,7 +72,7 @@ export default function Landing() {
             <Globe className="h-10 w-10 text-emerald-400 mb-4 mx-auto" />
             <h3 className="text-xl font-semibold text-white mb-2">Global Impact</h3>
             <p className="text-gray-300">
-              Support reforestation, renewable energy, and conservation projects across the globe
+              Support reforestation, renewable energy, electric vehicles, and conservation projects across the globe
             </p>
           </div>
         </div>
