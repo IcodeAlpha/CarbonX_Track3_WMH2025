@@ -151,3 +151,4 @@ Once everything is set up:
 **Need Help?** Check the Supabase docs: [https://supabase.com/docs](https://supabase.com/docs)
 
 
+
